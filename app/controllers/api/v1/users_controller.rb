@@ -12,6 +12,7 @@ module Api
                 @user.password == BCrypt::Engine.hash_secret(@user.password, @user.salt)
 
                 if @user.save
+                    @user = User.select('id, name, email, language, profileImage').find_by(email: @user.email)
                     render json: { data: @user }, status: :ok
                 else
                     puts @user.errors.full_messages
