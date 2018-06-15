@@ -8,8 +8,8 @@ module Api
             end
             def create
                 @user = User.new(user_params)
-                self.salt = BCrypt::Engine.generate_salt
-                self.password == BCrypt::Engine.hash_secret(self.password, self.salt)
+                @user.salt = BCrypt::Engine.generate_salt
+                @user.password == BCrypt::Engine.hash_secret(@user.password, @user.salt)
 
                 if @user.save
                     render json: { data: @user }, status: :ok
