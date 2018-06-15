@@ -4,13 +4,7 @@ class User < ApplicationRecord
     validates :salt, presence: true
     validates :password, presence: true
 
-    before_create :encrypt_password
     after_save :clear_password
-    
-    def encrypt_password
-        self.salt = BCrypt::Engine.generate_salt
-        self.password == BCrypt::Engine.hash_secret(self.password, self.salt)
-    end
 
     def clear_password
         self.salt = nil
