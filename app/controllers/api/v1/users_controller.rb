@@ -13,7 +13,7 @@ module Api
                     render json: { data: @user }, status: :ok
                 else
                     puts @user.errors.full_messages
-                    render json: { message: 'an error occured when trying to save the user'}, status: :unprocessable_entity
+                    render json: { message: 'an error occured when trying to save the user', error: @user.errors.full_messages }, status: :unprocessable_entity
                 end
             end
             def update
