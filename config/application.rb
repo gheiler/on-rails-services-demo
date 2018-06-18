@@ -34,7 +34,7 @@ module Services
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins 'localhost:3000', 'localhost:4200', /https*:\/\/.*?on-rails-demo.herokuapp\.com/
+        origins 'localhost:3000', 'localhost:4200', 'gheiler.github.io', 'on-rails-demo.herokuapp.com'
         resource '*', :headers => :any, :methods => :any
       end
     end
