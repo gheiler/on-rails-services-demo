@@ -3,8 +3,11 @@ module Api
         class UsersController < ApplicationController
             def index
                 @users = User.order('created_at DESC').select('id, name, email, language, profileImage')
-
                 render json: { data: @users }, status: :ok
+            end
+            def show
+                @user = User.select('id, name, email, language, profileImage').find(params["id"])
+                render json: { data: @user }, status: :ok
             end
             def create
                 @user = User.new(user_params)
@@ -21,15 +24,16 @@ module Api
             end
             def update
                 @updateUser = User.new(user_params)
-                @user = User.find_by(email: @updateUser.email)
+                @user = User.find(@updateUser.id)
                 if @user.present?
                     if @user.authenticated(@updateUser.password)
+                        @user.email = @updateUser.email
                         @user.name = @updateUser.name
                         @user.language = @updateUser.language
                         @user.profileImage = @updateUser.profileImage
 
                         if @user.save
-                            @user = User.select('id, name, email, language, profileImage').find_by(email: @updateUser.email)
+                            @user = User.select('id, name, email, language, profileImage').find(@updateUser.id)
                             render json: { data: @user }, status: :ok and return
                         else
                             puts @user.errors.full_messages
@@ -44,7 +48,7 @@ module Api
             private
 
             def user_params
-              params.require(:user).permit(:name, :email, :password, :language, :profileImage)
+              params.require(:user).permit(:id, :name, :email, :password, :language, :profileImage)
             end
         end
     end
